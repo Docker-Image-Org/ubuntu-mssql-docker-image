@@ -4,14 +4,9 @@ LABEL authors="Mryan2005"
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo '$TZ' > /etc/timezone
 RUN apt-get update && apt-get install -y python3 python3-pip wget 
-RUN apt install xvfb x11vnc -y
-RUN wget https://ftp.mozilla.org/pub/firefox/releases/129.0.2/linux-x86_64/en-US/firefox-129.0.2.tar.bz2
-RUN tar xjf firefox-129.0.2.tar.bz2
-RUN mv firefox /opt
-RUN ln -s /opt/firefox/firefox /usr/local/bin/firefox
-RUN echo 'export PATH=$PATH:/usr/bin/firefox' >> ./.bash_profile
-RUN apt-get install libgtk-3-dev -y
-RUN apt install libgtk2.0-0 -y
-RUN apt install libasound2t64 libgtk2.0-0t64 libgtk-3-0t64 -y
-RUN apt-get install firefox-locale-zh-hans -y
-RUN firefox --version
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+RUN curl -fsSL https://packages.microsoft.com/config/ubuntu/22.04/mssql-server-preview.list | sudo tee /etc/apt/sources.list.d/mssql-server-preview.list
+RUN apt-get update
+RUN apt-get install -y mssql-server
+RUN echo -e "用户名\n密码" | /opt/mssql/bin/mssql-conf setup
+RUN systemctl status mssql-server --no-pager
